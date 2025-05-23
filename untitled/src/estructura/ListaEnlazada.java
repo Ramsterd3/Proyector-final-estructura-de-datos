@@ -4,7 +4,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class ListaEnlazada<T> implements Iterable<T> {
-    private class Nodo {
+    private class Nodo {//Los mismo hacer esto en una clase para solo llamarlo
+                        // y no tener que hacer cada que se haga un lista
         T valor;
         Nodo siguiente;
 

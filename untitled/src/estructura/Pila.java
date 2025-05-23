@@ -3,7 +3,7 @@ package estructura;
 import java.util.EmptyStackException;
 
 public class Pila<T> {
-    private class Nodo {
+    private class Nodo {//Igua hacer clase nodo
         T valor;
         Nodo siguiente;
 

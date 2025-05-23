@@ -7,7 +7,7 @@ public class Libro implements Comparable<Libro> {
     private String autor;
     private int año;
     private String categoria;
-    private String estado; // "disponible" o "prestado"
+    private String estado; // "disponible" o "prestado" hacer enumeracion
     private ListaEnlazada<Valoracion> valoraciones;
     private double calificacionPromedio;
 

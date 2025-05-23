@@ -6,7 +6,7 @@ public class ColaPrioridad<T extends Comparable<T>> {
     private int capacidad;
 
     @SuppressWarnings("unchecked")
-    public ColaPrioridad(int capacidad) {
+    public ColaPrioridad(int capacidad) {//Si es una cola no tiene que tener capacidad fija, hacerla ilimitada
         this.capacidad = capacidad;
         this.tamaño = 0;
         this.heap = (T[]) new Comparable[capacidad];

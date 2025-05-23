@@ -1,7 +1,7 @@
 package estructura;
 
 public class ArbolBinarioBusqueda<T extends Comparable<T>> {
-    private class Nodo {
+    private class Nodo {//Cambiar esto y hacerlo en una clase
         T valor;
         Nodo izquierdo;
         Nodo derecho;
