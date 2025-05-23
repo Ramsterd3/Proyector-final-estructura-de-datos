@@ -48,7 +48,7 @@ public class CargadorDatosIniciales {
             String correo = nombre.toLowerCase() + "." + apellido.toLowerCase() + "@mail.com";
             String contraseña = nombre.toLowerCase() + "123";
 
-            Lector lector = new Lector(nombre, apellido, correo, contraseña);
+            Lector lector = new Lector(nombre, apellido, correo, contraseña,Tipo.LECTOR);
             servicioAutenticacion.registrarUsuario(lector);
             gestorUsuarios.agregarLector(lector);
         }

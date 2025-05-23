@@ -5,15 +5,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Lector extends Usuario implements Comparable<Lector> {
+
+    private Tipo tipo;
     private ListaEnlazada<Prestamo> historialPrestamos;
     private ListaEnlazada<Valoracion> valoracionesRealizadas;
     private Map<Lector, Integer> similitudConOtrosLectores;
 
-    public Lector(String nombre, String apellido, String correo, String contraseña) {
+    public Lector(String nombre, String apellido, String correo, String contraseña,Tipo tipo) {
         super(nombre, apellido, correo, contraseña);
         this.historialPrestamos = new ListaEnlazada<>();
         this.valoracionesRealizadas = new ListaEnlazada<>();
         this.similitudConOtrosLectores = new HashMap<>();
+        this.tipo=tipo;
     }
 
     public void agregarPrestamo(Prestamo prestamo) {
@@ -52,5 +55,9 @@ public class Lector extends Usuario implements Comparable<Lector> {
     @Override
     public int compareTo(Lector otro) {
         return this.correo.compareTo(otro.correo);
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
     }
 }

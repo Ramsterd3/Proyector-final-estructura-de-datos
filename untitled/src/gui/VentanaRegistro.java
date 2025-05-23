@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import modelo.Lector;
+import modelo.Tipo;
 import servicios.ServicioAutenticacion;
 import servicios.GestorUsuarios;
 
@@ -15,6 +16,9 @@ public class VentanaRegistro extends JFrame {
     private JPasswordField campoConfirmarContraseña;
     private JButton botonRegistrar;
     private JButton botonCancelar;
+    private JComboBox<Tipo> comboBoxTipo;
+
+
 
     private ServicioAutenticacion servicioAutenticacion;
     private GestorUsuarios gestorUsuarios;
@@ -25,13 +29,13 @@ public class VentanaRegistro extends JFrame {
 
         // Configuración básica de la ventana
         setTitle("Biblioteca Digital - Registro de Usuario");
-        setSize(400, 300);
+        setSize(400, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         // Crear panel principal con padding
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(6, 2, 10, 10));
+        panel.setLayout(new GridLayout(7, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Agregar componentes al panel
@@ -55,6 +59,11 @@ public class VentanaRegistro extends JFrame {
         campoConfirmarContraseña = new JPasswordField();
         panel.add(campoConfirmarContraseña);
 
+        panel.add(new JLabel("Selecione una opccion"));
+        comboBoxTipo=new JComboBox<>();
+        panel.add(comboBoxTipo);
+
+
         botonCancelar = new JButton("Cancelar");
         botonCancelar.addActionListener(new ActionListener() {
             @Override
@@ -65,13 +74,15 @@ public class VentanaRegistro extends JFrame {
         panel.add(botonCancelar);
 
         botonRegistrar = new JButton("Registrar");
+        panel.add(botonRegistrar);
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 registrarUsuario();
             }
         });
-        panel.add(botonRegistrar);
+
+
 
         // Agregar panel al frame
         add(panel);
@@ -107,7 +118,7 @@ public class VentanaRegistro extends JFrame {
         }
 
         // Crear nuevo lector
-        Lector nuevoLector = new Lector(nombre, apellido, correo, contraseña);
+        Lector nuevoLector = new Lector(nombre, apellido, correo, contraseña,Tipo.LECTOR);
 
         // Registrar en el servicio de autenticación
         servicioAutenticacion.registrarUsuario(nuevoLector);
