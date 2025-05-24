@@ -1,6 +1,6 @@
 package modelo;
 
 public enum Tipo {
-    USUARIO,
+    ADMIN,
     LECTOR
 }

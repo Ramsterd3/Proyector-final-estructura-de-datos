@@ -13,6 +13,7 @@ public class ArbolBinarioBusqueda<T extends Comparable<T>> {
         }
     }
 
+
     private Nodo raiz;
 
     public ArbolBinarioBusqueda() {

@@ -22,6 +22,7 @@ public class GestorLibros {
     }
 
     public void agregarLibro(Libro libro) {
+        boolean resultado=false;
         catalogoLibros.insertar(libro);
 
         // Actualizar índices
