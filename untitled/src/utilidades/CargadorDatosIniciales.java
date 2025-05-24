@@ -2,7 +2,7 @@ package utilidades;
 
 import modelo.*;
 import servicios.*;
-import estructura.ListaEnlazada;
+import modelo.ListaEnlazada;
 
 import java.util.Random;
 

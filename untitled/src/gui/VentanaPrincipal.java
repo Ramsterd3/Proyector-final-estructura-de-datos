@@ -2,14 +2,12 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+
 import modelo.Usuario;
 import modelo.Administrador;
 import modelo.Lector;
-import modelo.Libro;
 import servicios.GestorLibros;
 import servicios.GestorUsuarios;
-import estructura.ListaEnlazada;
 
 public class VentanaPrincipal extends JFrame {
     private JTabbedPane pestañas;

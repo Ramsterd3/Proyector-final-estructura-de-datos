@@ -1,7 +1,5 @@
 package modelo;
 
-import estructura.ListaEnlazada;
-
 public class Libro implements Comparable<Libro> {
     private String titulo;
     private String autor;

@@ -1,22 +1,11 @@
-package estructura;
+package modelo;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class ListaEnlazada<T> implements Iterable<T> {
-    private class Nodo {//Los mismo hacer esto en una clase para solo llamarlo
-                        // y no tener que hacer cada que se haga un lista
-        T valor;
-        Nodo siguiente;
-
-        public Nodo(T valor) {
-            this.valor = valor;
-            this.siguiente = null;
-        }
-    }
-
-    private Nodo cabeza;
-    private Nodo cola;
+    private Nodo<T> cabeza;
+    private Nodo<T> cola;
     private int tamaño;
 
     public ListaEnlazada() {
@@ -26,13 +15,13 @@ public class ListaEnlazada<T> implements Iterable<T> {
     }
 
     public void agregar(T valor) {
-        Nodo nuevoNodo = new Nodo(valor);
+        Nodo<T> nuevoNodo = new Nodo<>(valor);
 
         if (cabeza == null) {
             cabeza = nuevoNodo;
             cola = nuevoNodo;
         } else {
-            cola.siguiente = nuevoNodo;
+            cola.setSiguiente(nuevoNodo);
             cola = nuevoNodo;
         }
 
@@ -40,13 +29,13 @@ public class ListaEnlazada<T> implements Iterable<T> {
     }
 
     public void agregarAlInicio(T valor) {
-        Nodo nuevoNodo = new Nodo(valor);
+        Nodo<T> nuevoNodo = new Nodo<>(valor);
 
         if (cabeza == null) {
             cabeza = nuevoNodo;
             cola = nuevoNodo;
         } else {
-            nuevoNodo.siguiente = cabeza;
+            nuevoNodo.setSiguiente(cabeza);
             cabeza = nuevoNodo;
         }
 
@@ -58,12 +47,12 @@ public class ListaEnlazada<T> implements Iterable<T> {
             throw new IndexOutOfBoundsException("Índice fuera de rango");
         }
 
-        Nodo actual = cabeza;
+        Nodo<T> actual = cabeza;
         for (int i = 0; i < indice; i++) {
-            actual = actual.siguiente;
+            actual = actual.getSiguiente();
         }
 
-        return actual.valor;
+        return actual.getValor();
     }
 
     public T eliminar(int indice) {
@@ -74,22 +63,23 @@ public class ListaEnlazada<T> implements Iterable<T> {
         T valorEliminado;
 
         if (indice == 0) {
-            valorEliminado = cabeza.valor;
-            cabeza = cabeza.siguiente;
+            valorEliminado = cabeza.getValor();
+            cabeza = cabeza.getSiguiente();
 
             if (cabeza == null) {
                 cola = null;
             }
         } else {
-            Nodo anterior = cabeza;
+            Nodo<T> anterior = cabeza;
             for (int i = 0; i < indice - 1; i++) {
-                anterior = anterior.siguiente;
+                anterior = anterior.getSiguiente();
             }
 
-            valorEliminado = anterior.siguiente.valor;
-            anterior.siguiente = anterior.siguiente.siguiente;
+            Nodo<T> eliminado = anterior.getSiguiente();
+            valorEliminado = eliminado.getValor();
+            anterior.setSiguiente(eliminado.getSiguiente());
 
-            if (anterior.siguiente == null) {
+            if (anterior.getSiguiente() == null) {
                 cola = anterior;
             }
         }
@@ -99,13 +89,13 @@ public class ListaEnlazada<T> implements Iterable<T> {
     }
 
     public boolean contiene(T valor) {
-        Nodo actual = cabeza;
+        Nodo<T> actual = cabeza;
 
         while (actual != null) {
-            if (actual.valor.equals(valor)) {
+            if (actual.getValor().equals(valor)) {
                 return true;
             }
-            actual = actual.siguiente;
+            actual = actual.getSiguiente();
         }
 
         return false;
@@ -122,7 +112,7 @@ public class ListaEnlazada<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
-            private Nodo actual = cabeza;
+            private Nodo<T> actual = cabeza;
 
             @Override
             public boolean hasNext() {
@@ -135,8 +125,8 @@ public class ListaEnlazada<T> implements Iterable<T> {
                     throw new NoSuchElementException();
                 }
 
-                T valor = actual.valor;
-                actual = actual.siguiente;
+                T valor = actual.getValor();
+                actual = actual.getSiguiente();
                 return valor;
             }
         };

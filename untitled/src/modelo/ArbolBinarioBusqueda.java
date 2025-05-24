@@ -1,4 +1,4 @@
-package estructura;
+package modelo;
 
 public class ArbolBinarioBusqueda<T extends Comparable<T>> {
     private class Nodo {//Cambiar esto y hacerlo en una clase

@@ -1,8 +1,8 @@
 package servicios;
 
-import estructura.ArbolBinarioBusqueda;
-import estructura.GrafoNoDirigido;
-import estructura.ListaEnlazada;
+import modelo.ArbolBinarioBusqueda;
+import modelo.GrafoNoDirigido;
+import modelo.ListaEnlazada;
 import modelo.Lector;
 import modelo.Libro;
 import modelo.Valoracion;

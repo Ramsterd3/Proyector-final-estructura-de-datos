@@ -1,6 +1,5 @@
 package modelo;
 
-import estructura.ListaEnlazada;
 import java.util.HashMap;
 import java.util.Map;
 

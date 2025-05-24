@@ -1,4 +1,4 @@
-package estructura;
+package modelo;
 
 public class ColaPrioridad<T extends Comparable<T>> {
     private T[] heap;

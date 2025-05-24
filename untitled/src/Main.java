@@ -22,7 +22,7 @@ public class Main {
         GestorUsuarios gestorUsuarios = new GestorUsuarios();
 
         // Cargar datos iniciales de prueba
-        CargadorDatosIniciales.cargarDatos(servicioAutenticacion, gestorLibros, gestorUsuarios);
+       // CargadorDatosIniciales.cargarDatos(servicioAutenticacion, gestorLibros, gestorUsuarios);//Pilas revisar
 
         // Mostrar ventana de login
         SwingUtilities.invokeLater(() -> {

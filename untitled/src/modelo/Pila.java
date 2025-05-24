@@ -1,4 +1,4 @@
-package estructura;
+package modelo;
 
 import java.util.EmptyStackException;
 

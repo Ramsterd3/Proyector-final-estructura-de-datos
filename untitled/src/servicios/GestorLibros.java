@@ -1,10 +1,9 @@
 package servicios;
 
-import estructura.ArbolBinarioBusqueda;
-import estructura.ColaPrioridad;
-import estructura.ListaEnlazada;
+import modelo.ArbolBinarioBusqueda;
+import modelo.ColaPrioridad;
+import modelo.ListaEnlazada;
 import modelo.Libro;
-import modelo.Valoracion;
 
 import java.util.HashMap;
 import java.util.Map;

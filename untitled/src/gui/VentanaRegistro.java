@@ -60,7 +60,7 @@ public class VentanaRegistro extends JFrame {
         panel.add(campoConfirmarContraseña);
 
         panel.add(new JLabel("Selecione una opccion"));
-        comboBoxTipo=new JComboBox<>();
+        comboBoxTipo=new JComboBox<>(Tipo.values());
         panel.add(comboBoxTipo);
 
 
