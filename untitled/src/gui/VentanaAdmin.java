@@ -173,7 +173,7 @@ public class VentanaAdmin extends JFrame {
                 listaLectores = biblioteca.getGestorLectores().obtenerTodosLectores();
                 actualizarTablaLectores();
 
-                JOptionPane.showMessageDialog(this, "Usuario eliminado exitosamente.");
+                JOptionPane.showMessageDialog(this, "Usuario eliminado exitosamente .");
             }
         });
 
