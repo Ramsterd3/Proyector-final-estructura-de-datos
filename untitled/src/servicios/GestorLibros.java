@@ -6,6 +6,7 @@ import modelo.ListaEnlazada;
 import modelo.Libro;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GestorLibros {
@@ -130,17 +131,8 @@ public class GestorLibros {
         return resultado;
     }
 
-    public ListaEnlazada<Libro> obtenerTodosLosLibros() {
-        final ListaEnlazada<Libro> resultado = new ListaEnlazada<>();
-
-        catalogoLibros.inorden(new ArbolBinarioBusqueda.NodoVisitante<Libro>() {
-            @Override
-            public void visitar(Libro libro) {
-                resultado.agregar(libro);
-            }
-        });
-
-        return resultado;
+    public List<Libro> obtenerTodosLosLibros() {
+        return catalogoLibros.obtenerTodos();
     }
 
     public ListaEnlazada<String> obtenerTodasLasCategorias() {
@@ -178,5 +170,37 @@ public class GestorLibros {
         });
 
         return resultado;
+    }
+
+    public ArbolBinarioBusqueda<Libro> getCatalogoLibros() {
+        return catalogoLibros;
+    }
+
+    public void setCatalogoLibros(ArbolBinarioBusqueda<Libro> catalogoLibros) {
+        this.catalogoLibros = catalogoLibros;
+    }
+
+    public Map<String, ListaEnlazada<Libro>> getLibrosPorCategoria() {
+        return librosPorCategoria;
+    }
+
+    public void setLibrosPorCategoria(Map<String, ListaEnlazada<Libro>> librosPorCategoria) {
+        this.librosPorCategoria = librosPorCategoria;
+    }
+
+    public Map<String, ListaEnlazada<Libro>> getLibrosPorAutor() {
+        return librosPorAutor;
+    }
+
+    public void setLibrosPorAutor(Map<String, ListaEnlazada<Libro>> librosPorAutor) {
+        this.librosPorAutor = librosPorAutor;
+    }
+
+    public ColaPrioridad<Libro> getLibrosMejorValorados() {
+        return librosMejorValorados;
+    }
+
+    public void setLibrosMejorValorados(ColaPrioridad<Libro> librosMejorValorados) {
+        this.librosMejorValorados = librosMejorValorados;
     }
 }

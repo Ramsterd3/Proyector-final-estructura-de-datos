@@ -4,10 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import modelo.Tipo;
-import modelo.Usuario;
-import modelo.Administrador;
-import modelo.Lector;
+import modelo.*;
 import servicios.ServicioAutenticacion;
 import servicios.GestorUsuarios;
 
@@ -16,12 +13,11 @@ public class VentanaLogin extends JFrame {
     private JPasswordField campoContraseña;
     private JButton botonLogin;
     private JButton botonRegistro;
-    private ServicioAutenticacion servicioAutenticacion;
-    private GestorUsuarios gestorUsuarios;
 
-    public VentanaLogin(ServicioAutenticacion servicioAutenticacion, GestorUsuarios gestorUsuarios) {
-        this.servicioAutenticacion = servicioAutenticacion;
-        this.gestorUsuarios = gestorUsuarios;
+    private Biblioteca biblioteca=new Biblioteca();
+
+    public VentanaLogin() {
+
 
         // Configuración básica de la ventana
         setTitle("Biblioteca Digital - Login");
@@ -74,11 +70,11 @@ public class VentanaLogin extends JFrame {
             JOptionPane.showMessageDialog(this, "Por favor complete todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        Usuario usuario = servicioAutenticacion.autenticar(correo, contraseña);
+        Usuario usuario = biblioteca.getServicioAutenticacion().autenticar(correo, contraseña);
         if(usuario!=null){
             if(usuario.getTipo()==Tipo.ADMIN){
                 System.out.println("ventana admin abierta");
-                VentanaAdmin ventanaAdmin=new VentanaAdmin();
+                VentanaAdmin ventanaAdmin=new VentanaAdmin(usuario,biblioteca);
                 ventanaAdmin.setVisible(true);
             }else if (usuario.getTipo()==Tipo.LECTOR){
                 System.out.println("Ventana de lectores abierta");
@@ -97,7 +93,7 @@ public class VentanaLogin extends JFrame {
 
 
     private void abrirVentanaRegistro() {
-        VentanaRegistro ventanaRegistro = new VentanaRegistro(servicioAutenticacion, gestorUsuarios);
+        VentanaRegistro ventanaRegistro = new VentanaRegistro(biblioteca);
         ventanaRegistro.setVisible(true);
     }
 }

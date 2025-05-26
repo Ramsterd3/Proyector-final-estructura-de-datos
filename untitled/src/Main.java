@@ -2,6 +2,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import gui.VentanaLogin;
+import modelo.Biblioteca;
 import servicios.GestorLibros;
 import servicios.GestorUsuarios;
 import servicios.ServicioAutenticacion;
@@ -26,7 +27,8 @@ public class Main {
 
         // Mostrar ventana de login
         SwingUtilities.invokeLater(() -> {
-            VentanaLogin ventanaLogin = new VentanaLogin(servicioAutenticacion, gestorUsuarios);
+
+            VentanaLogin ventanaLogin = new VentanaLogin();
             ventanaLogin.setVisible(true);
         });
     }

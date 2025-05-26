@@ -1,31 +1,116 @@
 package gui;
 
+import modelo.*;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VentanaAdmin extends JFrame {
 
-    public VentanaAdmin() {
+    private DefaultTableModel modeloTablaLibros;
+    Biblioteca biblioteca;
+     List<Libro> listaLibros=new ArrayList<>();
+
+
+    public VentanaAdmin(Usuario usuario, Biblioteca biblioteca) {
+        this.biblioteca=biblioteca;
         setTitle("Panel del Administrador");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 400);
+        setSize(600, 450);
         setLocationRelativeTo(null);
 
         JTabbedPane pestañas = new JTabbedPane();
 
-        // Panel: Libros más prestados
         JPanel panelLibros = new JPanel(new BorderLayout());
-        String[] columnasLibros = {"Título", "Cantidad de Préstamos"};
-        Object[][] datosLibros = {
-                {"Cien años de soledad", 120},
-                {"El principito", 95},
-                {"Don Quijote", 80}
-        };
-        JTable tablaLibros = new JTable(datosLibros, columnasLibros);
-        panelLibros.add(new JScrollPane(tablaLibros), BorderLayout.CENTER);
-        pestañas.addTab("Libros Populares", panelLibros);
 
-        // Panel: Categorías más populares
+        JLabel tituloTabla = new JLabel("Libros");
+        tituloTabla.setFont(new Font("Arial", Font.BOLD, 16));
+        tituloTabla.setHorizontalAlignment(SwingConstants.CENTER);
+        panelLibros.add(tituloTabla, BorderLayout.NORTH);
+
+        String[] columnasLibros = {"Título", "Autor", "Año", "Categoría", "Estado"};
+        Object[][] datosLibros = {
+                {"Cien años de soledad", "Gabriel García Márquez", 1967, "Literatura", "Disponible"},
+                {"Breve historia del tiempo", "Stephen Hawking", 1988, "Ciencia", "Prestado"},
+                {"Introducción a Java", "James Gosling", 1995, "Tecnología", "Disponible"},
+                {"El Quijote", "Miguel de Cervantes", 1605, "Literatura", "Disponible"},
+                {"Estructuras de Datos", "Mark Allen Weiss", 2005, "Tecnología", "Prestado"},
+                {"Física para científicos", "Raymond Serway", 2010, "Ciencia", "Disponible"},
+                {"Algoritmos", "Robert Sedgewick", 2011, "Tecnología", "Disponible"}
+        };
+
+        modeloTablaLibros = new DefaultTableModel(datosLibros, columnasLibros) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable tablaLibros = new JTable(modeloTablaLibros);
+        listaLibros = biblioteca.obtenerTodosLibor(); // Este es el método nuevo que creamos
+        actualizarTablaLibros();
+
+        int filasVisibles = 6;
+        int alturaFila = tablaLibros.getRowHeight();
+        int alturaEncabezado = tablaLibros.getTableHeader().getPreferredSize().height;
+        int alturaTotal = alturaFila * filasVisibles + alturaEncabezado;
+
+        JScrollPane scrollPane = new JScrollPane(tablaLibros);
+        scrollPane.setPreferredSize(new Dimension(550, alturaTotal));
+        panelLibros.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel panelFormulario = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(4, 8, 4, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.weightx = 1.0;
+
+        // Campos más cortos con 10 columnas
+        JTextField txtTitulo = new JTextField(10);
+        JTextField txtAutor = new JTextField(10);
+        JTextField txtAno = new JTextField(10);
+        JTextField txtCategoria = new JTextField(10);
+
+        JButton botonAgregar = new JButton("Agregar");
+        JButton botonEliminar = new JButton("Eliminar");
+
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        panelFormulario.add(new JLabel("Título:"), gbc);
+        gbc.gridy = 1;
+        panelFormulario.add(txtTitulo, gbc);
+
+        gbc.gridy = 2;
+        panelFormulario.add(new JLabel("Autor:"), gbc);
+        gbc.gridy = 3;
+        panelFormulario.add(txtAutor, gbc);
+
+        gbc.gridy = 4;
+        panelFormulario.add(new JLabel("Año:"), gbc);
+        gbc.gridy = 5;
+        panelFormulario.add(txtAno, gbc);
+
+        gbc.gridy = 6;
+        panelFormulario.add(new JLabel("Categoría:"), gbc);
+        gbc.gridy = 7;
+        panelFormulario.add(txtCategoria, gbc);
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        panelBotones.add(botonAgregar);
+        panelBotones.add(botonEliminar);
+
+        gbc.gridy = 8;
+        gbc.fill = GridBagConstraints.NONE;
+        panelFormulario.add(panelBotones, gbc);
+
+        panelLibros.add(panelFormulario, BorderLayout.SOUTH);
+
+        pestañas.addTab("Gestionar", panelLibros);
+
+        // Otros paneles, igual que antes
         JPanel panelCategorias = new JPanel(new BorderLayout());
         String[] columnasCat = {"Categoría", "Préstamos"};
         Object[][] datosCat = {
@@ -37,7 +122,6 @@ public class VentanaAdmin extends JFrame {
         panelCategorias.add(new JScrollPane(tablaCategorias), BorderLayout.CENTER);
         pestañas.addTab("Categorías Populares", panelCategorias);
 
-        // Panel: Usuarios activos
         JPanel panelUsuarios = new JPanel(new BorderLayout());
         String[] columnasUsuarios = {"Nombre", "Préstamos Realizados"};
         Object[][] datosUsuarios = {
@@ -50,12 +134,66 @@ public class VentanaAdmin extends JFrame {
         pestañas.addTab("Usuarios Activos", panelUsuarios);
 
         add(pestañas, BorderLayout.CENTER);
+
+        botonAgregar.addActionListener(e -> {
+            try {
+                String titulo = txtTitulo.getText().trim();
+                String autor = txtAutor.getText().trim();
+                int año = Integer.parseInt(txtAno.getText().trim());
+                String categoria = txtCategoria.getText().trim();
+
+                if (titulo.isEmpty() || autor.isEmpty() || categoria.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Completa todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                Libro libro = new Libro(titulo, autor, año, categoria);
+                if (biblioteca.agregarLibro(libro)) {
+                    listaLibros.add(libro);
+                    actualizarTablaLibros();
+                    txtTitulo.setText("");
+                    txtAutor.setText("");
+                    txtAno.setText("");
+                    txtCategoria.setText("");
+                    System.out.println(biblioteca.getGestorLibro().getCatalogoLibros().getTamanio());
+                } else {
+                    JOptionPane.showMessageDialog(this, "El libro ya existe en el catálogo", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                }
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "El año debe ser un número", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        botonEliminar.addActionListener(e -> {
+            int filaSeleccionada = tablaLibros.getSelectedRow();
+            if (filaSeleccionada >= 0) {
+                modeloTablaLibros.removeRow(filaSeleccionada);
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecciona una fila para eliminar", "Atención", JOptionPane.WARNING_MESSAGE);
+            }
+        });
     }
 
-    // Método main para probarla directamente
+    private void actualizarTablaLibros() {
+        modeloTablaLibros.setRowCount(0); // Limpiar tabla
+
+        for (Libro libro : listaLibros) {
+            Object[] fila = {
+                    libro.getTitulo(),
+                    libro.getAutor(),
+                    libro.getAño(),
+                    libro.getCategoria(),
+                    "Disponible" // Puedes cambiar esto si tienes lógica para el estado
+            };
+            modeloTablaLibros.addRow(fila);
+        }
+    }
+
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new VentanaAdmin().setVisible(true);
+           // new VentanaAdmin().setVisible(true);
         });
     }
 }

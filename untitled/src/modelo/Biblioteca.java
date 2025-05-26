@@ -5,17 +5,31 @@ import servicios.GestorLibros;
 import servicios.GestorUsuarios;
 import servicios.ServicioAutenticacion;
 
+import java.util.List;
+
 public class Biblioteca {
     private GestorLibros gestorLibro;
     private GestorUsuarios gestorUsuarios;
     private GestorAdmin gestorAdmin;
     private ServicioAutenticacion gestorUsuario;
+    private ServicioAutenticacion servicioAutenticacion;
 
     public Biblioteca() {
+
+            this.gestorLibro = new GestorLibros();
+            this.gestorUsuarios = new GestorUsuarios();
+            this.gestorAdmin = new GestorAdmin();
+            this.gestorUsuario = new ServicioAutenticacion();
+            this.servicioAutenticacion=new ServicioAutenticacion();
+
+
     }
 
-    public void agregarLibro(Libro libro){
-        gestorLibro.agregarLibro(libro);
+    public boolean agregarLibro(Libro libro){
+        if(gestorLibro.agregarLibro(libro)){
+            return true;
+        }return false;
+
     }
     public void eliminarLibro(Libro libro){
         gestorLibro.eliminarLibro(libro);
@@ -46,10 +60,16 @@ public class Biblioteca {
             gestorAdmin.eliminarAdmin(administrador);
         }
     }
+    public List<Libro> obtenerTodosLibor(){
+        return gestorLibro.obtenerTodosLosLibros();
+    }
 
 
     public GestorLibros getGestorLibro() {
         return gestorLibro;
+    }
+    public int cantidadLibros(){
+        return getGestorLibro().getCatalogoLibros().getTamanio();
     }
 
     public void setGestorLibro(GestorLibros gestorLibro) {
@@ -70,5 +90,21 @@ public class Biblioteca {
 
     public void setGestorUsuario(ServicioAutenticacion gestorUsuario) {
         this.gestorUsuario = gestorUsuario;
+    }
+
+    public GestorAdmin getGestorAdmin() {
+        return gestorAdmin;
+    }
+
+    public void setGestorAdmin(GestorAdmin gestorAdmin) {
+        this.gestorAdmin = gestorAdmin;
+    }
+
+    public ServicioAutenticacion getServicioAutenticacion() {
+        return servicioAutenticacion;
+    }
+
+    public void setServicioAutenticacion(ServicioAutenticacion servicioAutenticacion) {
+        this.servicioAutenticacion = servicioAutenticacion;
     }
 }

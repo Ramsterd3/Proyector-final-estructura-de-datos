@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import modelo.Administrador;
+import modelo.Biblioteca;
 import modelo.Lector;
 import modelo.Tipo;
 import servicios.ServicioAutenticacion;
@@ -24,10 +25,10 @@ public class VentanaRegistro extends JFrame {
 
     private ServicioAutenticacion servicioAutenticacion;
     private GestorUsuarios gestorUsuarios;
+    Biblioteca biblioteca;
 
-    public VentanaRegistro(ServicioAutenticacion servicioAutenticacion, GestorUsuarios gestorUsuarios) {
-        this.servicioAutenticacion = servicioAutenticacion;
-        this.gestorUsuarios = gestorUsuarios;
+    public VentanaRegistro(Biblioteca biblioteca) {
+        this.biblioteca=biblioteca;
 
         // Configuración básica de la ventana
         setTitle("Biblioteca Digital - Registro de Usuario");
@@ -118,7 +119,7 @@ public class VentanaRegistro extends JFrame {
         }
 
         // Verificar si el correo ya está registrado
-        if (servicioAutenticacion.existeUsuario(correo)) {
+        if (biblioteca.getServicioAutenticacion().existeUsuario(correo)) {
             JOptionPane.showMessageDialog(this, "El correo ya está registrado", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -126,12 +127,13 @@ public class VentanaRegistro extends JFrame {
         if (tipo == Tipo.ADMIN) {
             System.out.println("hola");
             Administrador admin = new Administrador(nombre, apellido, correo, contraseña,tipo);
-            servicioAutenticacion.registrarUsuario(admin);
-            gestorUsuarios.agregarAdministrador(admin);  // Método para agregar admin (asegúrate que exista)
+            biblioteca.getServicioAutenticacion().registrarUsuario(admin);
+            biblioteca.getGestorAdmin().agregarAdmin(admin);
+
         } else {
             Lector nuevoLector = new Lector(nombre, apellido, correo, contraseña,tipo);
-            servicioAutenticacion.registrarUsuario(nuevoLector);
-            gestorUsuarios.agregarLector(nuevoLector);
+            biblioteca.getGestorUsuario().registrarUsuario(nuevoLector);
+            biblioteca.getServicioAutenticacion().registrarUsuario(nuevoLector);
         }
 
         JOptionPane.showMessageDialog(this, "Usuario registrado con éxito", "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);

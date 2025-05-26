@@ -22,7 +22,7 @@ public class CargadorDatosIniciales {
         cargarLibros(gestorLibros);
 
         // Cargar préstamos y valoraciones
-        cargarPrestamosYValoraciones(servicioAutenticacion, gestorLibros, gestorUsuarios);
+      //  cargarPrestamosYValoraciones(servicioAutenticacion, gestorLibros, gestorUsuarios);
 
         // Actualizar grafo de afinidad
        // gestorUsuarios.actualizarGrafoAfinidad();
@@ -96,60 +96,5 @@ public class CargadorDatosIniciales {
         System.out.println("Libros cargados: 25");
     }
 
-    private static void cargarPrestamosYValoraciones(ServicioAutenticacion servicioAutenticacion,
-                                                     GestorLibros gestorLibros,
-                                                     GestorUsuarios gestorUsuarios) {
-        Random random = new Random();
 
-        // Obtener todos los lectores
-        ListaEnlazada<Lector> lectores = gestorUsuarios.obtenerTodosLosLectores();
-
-        // Obtener todos los libros
-        ListaEnlazada<Libro> libros = gestorLibros.obtenerTodosLosLibros();
-
-        // Para cada lector, crear algunos préstamos y valoraciones
-        for (int i = 0; i < lectores.tamaño(); i++) {
-            Lector lector = lectores.obtener(i);
-
-            // Crear 2-5 préstamos por lector
-            int numPrestamos = 2 + random.nextInt(4);
-            for (int j = 0; j < numPrestamos; j++) {
-                // Seleccionar un libro aleatorio
-                int indiceLibro = random.nextInt(libros.tamaño());
-                Libro libro = libros.obtener(indiceLibro);
-
-                // Si el libro no está prestado, crear un préstamo
-                if (libro.getEstado().equals("disponible")) {
-                    Prestamo prestamo = new Prestamo(lector, libro);
-
-                    // 70% de probabilidad de que el préstamo ya haya sido devuelto
-                    if (random.nextDouble() < 0.7) {
-                        prestamo.devolver();
-
-                        // Si el libro fue devuelto, hay 80% de probabilidad de que el lector lo haya valorado
-                        if (random.nextDouble() < 0.8) {
-                            int calificacion = 1 + random.nextInt(5);
-                            String[] comentarios = {
-                                    "Me gustó mucho este libro.",
-                                    "No me convenció del todo.",
-                                    "Excelente lectura, muy recomendable.",
-                                    "Interesante pero algo denso.",
-                                    "Una obra maestra.",
-                                    "No cumplió mis expectativas.",
-                                    "Increíble narrativa.",
-                                    "Personajes bien desarrollados.",
-                                    "Historia predecible.",
-                                    "Lectura obligada."
-                            };
-                            String comentario = comentarios[random.nextInt(comentarios.length)];
-
-                            new Valoracion(lector, libro, calificacion, comentario);
-                        }
-                    }
-                }
-            }
-        }
-
-        System.out.println("Préstamos y valoraciones cargados");
-    }
 }

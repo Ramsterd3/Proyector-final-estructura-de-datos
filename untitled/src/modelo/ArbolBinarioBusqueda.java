@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArbolBinarioBusqueda<T extends Comparable<T>> {
-    private class Nodo {//Cambiar esto y hacerlo en una clase
+    private class Nodo { // Puedes mover esta clase fuera si quieres reutilizarla
         T valor;
         Nodo izquierdo;
         Nodo derecho;
@@ -16,20 +16,26 @@ public class ArbolBinarioBusqueda<T extends Comparable<T>> {
         }
     }
 
-
     private Nodo raiz;
+    private int tamanio; // ← Variable global para el tamaño
 
     public ArbolBinarioBusqueda() {
         this.raiz = null;
+        this.tamanio = 0;
     }
 
     public boolean insertar(T valor) {
         if (raiz == null) {
-            raiz = new Nodo(valor); // Árbol vacío, crea la raíz
+            raiz = new Nodo(valor);
+            tamanio++; // Nuevo nodo insertado
             return true;
         }
-        boolean[] insertado = new boolean[1]; // Para saber si se insertó
+
+        boolean[] insertado = new boolean[1];
         raiz = insertarRecursivo(raiz, valor, insertado);
+        if (insertado[0]) {
+            tamanio++; // Solo incrementa si realmente se insertó
+        }
         return insertado[0];
     }
 
@@ -39,8 +45,6 @@ public class ArbolBinarioBusqueda<T extends Comparable<T>> {
             return new Nodo(valor);
         }
 
-
-
         int comparacion = valor.compareTo(nodo.valor);
 
         if (comparacion < 0) {
@@ -48,15 +52,15 @@ public class ArbolBinarioBusqueda<T extends Comparable<T>> {
         } else if (comparacion > 0) {
             nodo.derecho = insertarRecursivo(nodo.derecho, valor, insertado);
         } else {
-            insertado[0] = false; // Valor duplicado, no se inserta
+            insertado[0] = false;
         }
 
         return nodo;
     }
+
     public boolean contiene(T valor) {
         return buscar(valor) != null;
     }
-
 
     public T buscar(T valor) {
         return buscarRecursivo(raiz, valor);
@@ -79,12 +83,9 @@ public class ArbolBinarioBusqueda<T extends Comparable<T>> {
     }
 
     public boolean eliminar(T valor) {
-        Nodo valorResultado = eliminarRecursivo(raiz, valor);
-        if(valorResultado==null){
-            return false;
-        }else{
-            return true;
-        }
+        int tamanioAntes = tamanio;
+        raiz = eliminarRecursivo(raiz, valor);
+        return tamanio < tamanioAntes;
     }
 
     private Nodo eliminarRecursivo(Nodo nodo, T valor) {
@@ -99,12 +100,12 @@ public class ArbolBinarioBusqueda<T extends Comparable<T>> {
         } else if (comparacion > 0) {
             nodo.derecho = eliminarRecursivo(nodo.derecho, valor);
         } else {
-            // Caso 1: Nodo sin hijos
+            tamanio--; // Nodo eliminado
+
             if (nodo.izquierdo == null && nodo.derecho == null) {
                 return null;
             }
 
-            // Caso 2: Nodo con un hijo
             if (nodo.izquierdo == null) {
                 return nodo.derecho;
             }
@@ -113,11 +114,7 @@ public class ArbolBinarioBusqueda<T extends Comparable<T>> {
                 return nodo.izquierdo;
             }
 
-            // Caso 3: Nodo con dos hijos
-            // Encontrar el sucesor inorden (mínimo en el subárbol derecho)
             nodo.valor = encontrarMinimo(nodo.derecho);
-
-            // Eliminar el sucesor inorden
             nodo.derecho = eliminarRecursivo(nodo.derecho, nodo.valor);
         }
 
@@ -125,12 +122,10 @@ public class ArbolBinarioBusqueda<T extends Comparable<T>> {
     }
 
     private T encontrarMinimo(Nodo nodo) {
-        T minimo = nodo.valor;
         while (nodo.izquierdo != null) {
-            minimo = nodo.izquierdo.valor;
             nodo = nodo.izquierdo;
         }
-        return minimo;
+        return nodo.valor;
     }
 
     public void inorden(NodoVisitante<T> visitante) {
@@ -153,9 +148,9 @@ public class ArbolBinarioBusqueda<T extends Comparable<T>> {
 
     private void obtenerTodosRecursivo(Nodo nodo, List<T> lista) {
         if (nodo != null) {
-            obtenerTodosRecursivo(nodo.izquierdo, lista); // Recorrer izquierda
-            lista.add(nodo.valor);                         // Agregar valor actual
-            obtenerTodosRecursivo(nodo.derecho, lista);    // Recorrer derecha
+            obtenerTodosRecursivo(nodo.izquierdo, lista);
+            lista.add(nodo.valor);
+            obtenerTodosRecursivo(nodo.derecho, lista);
         }
     }
 
@@ -169,5 +164,10 @@ public class ArbolBinarioBusqueda<T extends Comparable<T>> {
 
     public void setRaiz(Nodo raiz) {
         this.raiz = raiz;
+    }
+
+
+    public int getTamanio() {
+        return tamanio;
     }
 }

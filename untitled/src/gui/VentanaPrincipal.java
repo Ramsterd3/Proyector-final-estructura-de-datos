@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 
+import modelo.Tipo;
 import modelo.Usuario;
 import modelo.Administrador;
 import modelo.Lector;
@@ -332,4 +333,12 @@ public class VentanaPrincipal extends JFrame {
 
         return panel;
     }
+
+    public static void main(String[] args) {
+        Usuario usuario = new Lector("Juan", "Pérez", "juan.perez@email.com", "12345",Tipo.LECTOR);
+        SwingUtilities.invokeLater(() -> {
+            new VentanaPrincipal(usuario).setVisible(true);
+        });
+    }
+
 }
