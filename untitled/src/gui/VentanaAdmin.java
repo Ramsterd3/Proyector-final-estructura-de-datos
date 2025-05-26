@@ -13,9 +13,11 @@ public class VentanaAdmin extends JFrame {
     private DefaultTableModel modeloTablaLibros;
     Biblioteca biblioteca;
     List<Libro> listaLibros = new ArrayList<>();
+    Usuario usuarioActual;
 
     public VentanaAdmin(Usuario usuario, Biblioteca biblioteca) {
         this.biblioteca = biblioteca;
+        this.usuarioActual=usuario;
         setTitle("Panel del Administrador");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 450);
