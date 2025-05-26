@@ -1,13 +1,15 @@
 package modelo;
 
-public class Administrador extends Usuario {
+public class Administrador extends Usuario implements Comparable<Administrador>{
 
-    public Administrador(String nombre, String apellido, String correo, String contraseña) {
-        super(nombre, apellido, correo, contraseña);
+
+    public Administrador(String nombre, String apellido, String correo, String contraseña ,Tipo tipo) {
+        super(nombre, apellido, correo, contraseña ,tipo);
     }
 
+
     @Override
-    public String getTipo() {
-        return "Administrador";
+    public int compareTo(Administrador o) {
+        return 0;
     }
 }

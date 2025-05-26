@@ -3,6 +3,8 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+
+import modelo.Administrador;
 import modelo.Lector;
 import modelo.Tipo;
 import servicios.ServicioAutenticacion;
@@ -94,6 +96,10 @@ public class VentanaRegistro extends JFrame {
         String correo = campoCorreo.getText();
         String contraseña = new String(campoContraseña.getPassword());
         String confirmarContraseña = new String(campoConfirmarContraseña.getPassword());
+        Tipo tipo= (Tipo) comboBoxTipo.getSelectedItem();
+
+
+
 
         // Validaciones básicas
         if (nombre.isEmpty() || apellido.isEmpty() || correo.isEmpty() || contraseña.isEmpty()) {
@@ -117,14 +123,16 @@ public class VentanaRegistro extends JFrame {
             return;
         }
 
-        // Crear nuevo lector
-        Lector nuevoLector = new Lector(nombre, apellido, correo, contraseña,Tipo.LECTOR);
-
-        // Registrar en el servicio de autenticación
-        servicioAutenticacion.registrarUsuario(nuevoLector);
-
-        // Agregar al gestor de usuarios
-        gestorUsuarios.agregarLector(nuevoLector);
+        if (tipo == Tipo.ADMIN) {
+            System.out.println("hola");
+            Administrador admin = new Administrador(nombre, apellido, correo, contraseña,tipo);
+            servicioAutenticacion.registrarUsuario(admin);
+            gestorUsuarios.agregarAdministrador(admin);  // Método para agregar admin (asegúrate que exista)
+        } else {
+            Lector nuevoLector = new Lector(nombre, apellido, correo, contraseña,tipo);
+            servicioAutenticacion.registrarUsuario(nuevoLector);
+            gestorUsuarios.agregarLector(nuevoLector);
+        }
 
         JOptionPane.showMessageDialog(this, "Usuario registrado con éxito", "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
         dispose();

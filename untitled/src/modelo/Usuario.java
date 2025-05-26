@@ -5,13 +5,15 @@ public abstract class Usuario {
     protected String apellido;
     protected String correo;
     protected String contraseña;
+    private  Tipo tipo;
 
 
-    public Usuario(String nombre, String apellido, String correo, String contraseña) {
+    public Usuario(String nombre, String apellido, String correo, String contraseña,Tipo tipo) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.contraseña = contraseña;
+        this.tipo=tipo;
     }
 
     public String getNombre() {
@@ -46,7 +48,13 @@ public abstract class Usuario {
         this.contraseña = contraseña;
     }
 
-    public abstract String getTipo();
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
 
     @Override
     public boolean equals(Object obj) {

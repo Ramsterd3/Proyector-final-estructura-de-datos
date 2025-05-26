@@ -21,47 +21,53 @@ public class GestorLibros {
         this.librosMejorValorados = new ColaPrioridad<>(20);
     }
 
-    public void agregarLibro(Libro libro) {
-        boolean resultado=false;
-        catalogoLibros.insertar(libro);
+    public boolean agregarLibro(Libro libro) {
 
-        // Actualizar índices
-        String categoria = libro.getCategoria();
-        if (!librosPorCategoria.containsKey(categoria)) {
-            librosPorCategoria.put(categoria, new ListaEnlazada<>());
-        }
-        librosPorCategoria.get(categoria).agregar(libro);
+        if (catalogoLibros.insertar(libro)) {
+            // Actualizar índices
+            String categoria = libro.getCategoria();
+            if (!librosPorCategoria.containsKey(categoria)) {
+                librosPorCategoria.put(categoria, new ListaEnlazada<>());
+            }
+            librosPorCategoria.get(categoria).agregar(libro);
 
-        String autor = libro.getAutor();
-        if (!librosPorAutor.containsKey(autor)) {
-            librosPorAutor.put(autor, new ListaEnlazada<>());
+            String autor = libro.getAutor();
+            if (!librosPorAutor.containsKey(autor)) {
+                librosPorAutor.put(autor, new ListaEnlazada<>());
+            }
+            librosPorAutor.get(autor).agregar(libro);
+            return true;
         }
-        librosPorAutor.get(autor).agregar(libro);
+        return false;
     }
 
-    public void eliminarLibro(Libro libro) {
-        catalogoLibros.eliminar(libro);
+    public boolean eliminarLibro(Libro libro) {
+        Boolean resultado=catalogoLibros.eliminar(libro);
+        if(resultado){
+            // Actualizar índices
+            String categoria = libro.getCategoria();
+            if (librosPorCategoria.containsKey(categoria)) {
+                for (int i = 0; i < librosPorCategoria.get(categoria).tamaño(); i++) {
+                    if (librosPorCategoria.get(categoria).obtener(i).equals(libro)) {
+                        librosPorCategoria.get(categoria).eliminar(i);
+                        break;
 
-        // Actualizar índices
-        String categoria = libro.getCategoria();
-        if (librosPorCategoria.containsKey(categoria)) {
-            for (int i = 0; i < librosPorCategoria.get(categoria).tamaño(); i++) {
-                if (librosPorCategoria.get(categoria).obtener(i).equals(libro)) {
-                    librosPorCategoria.get(categoria).eliminar(i);
-                    break;
+                    }
                 }
             }
-        }
 
-        String autor = libro.getAutor();
-        if (librosPorAutor.containsKey(autor)) {
-            for (int i = 0; i < librosPorAutor.get(autor).tamaño(); i++) {
-                if (librosPorAutor.get(autor).obtener(i).equals(libro)) {
-                    librosPorAutor.get(autor).eliminar(i);
-                    break;
+            String autor = libro.getAutor();
+            if (librosPorAutor.containsKey(autor)) {
+                for (int i = 0; i < librosPorAutor.get(autor).tamaño(); i++) {
+                    if (librosPorAutor.get(autor).obtener(i).equals(libro)) {
+                        librosPorAutor.get(autor).eliminar(i);
+                        break;
+                    }
                 }
             }
+            return true;
         }
+        return false;
     }
 
     public Libro buscarPorTitulo(String titulo) {

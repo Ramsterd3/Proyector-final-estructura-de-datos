@@ -25,12 +25,12 @@ public class CargadorDatosIniciales {
         cargarPrestamosYValoraciones(servicioAutenticacion, gestorLibros, gestorUsuarios);
 
         // Actualizar grafo de afinidad
-        gestorUsuarios.actualizarGrafoAfinidad();
+       // gestorUsuarios.actualizarGrafoAfinidad();
     }
 
     private static void cargarAdministradores(ServicioAutenticacion servicioAutenticacion) {
-        Administrador admin1 = new Administrador("Admin", "Principal", "admin@biblioteca.com", "admin123");
-        Administrador admin2 = new Administrador("Juan", "Pérez", "juan.perez@biblioteca.com", "juan123");
+        Administrador admin1 = new Administrador("Admin", "Principal", "admin@biblioteca.com", "admin123",Tipo.ADMIN);
+        Administrador admin2 = new Administrador("Juan", "Pérez", "juan.perez@biblioteca.com", "juan123",Tipo.ADMIN);
 
         servicioAutenticacion.registrarUsuario(admin1);
         servicioAutenticacion.registrarUsuario(admin2);
@@ -47,8 +47,9 @@ public class CargadorDatosIniciales {
             String apellido = apellidos[i];
             String correo = nombre.toLowerCase() + "." + apellido.toLowerCase() + "@mail.com";
             String contraseña = nombre.toLowerCase() + "123";
+            Tipo tipo=Tipo.ADMIN;
 
-            Lector lector = new Lector(nombre, apellido, correo, contraseña,Tipo.LECTOR);
+            Lector lector = new Lector(nombre, apellido, correo, contraseña,tipo);
             servicioAutenticacion.registrarUsuario(lector);
             gestorUsuarios.agregarLector(lector);
         }

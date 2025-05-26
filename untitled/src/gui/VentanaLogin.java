@@ -3,6 +3,8 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+
+import modelo.Tipo;
 import modelo.Usuario;
 import modelo.Administrador;
 import modelo.Lector;
@@ -68,22 +70,31 @@ public class VentanaLogin extends JFrame {
     private void iniciarSesion() {
         String correo = campoCorreo.getText();
         String contraseña = new String(campoContraseña.getPassword());
-
         if (correo.isEmpty() || contraseña.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor complete todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
         Usuario usuario = servicioAutenticacion.autenticar(correo, contraseña);
+        if(usuario!=null){
+            if(usuario.getTipo()==Tipo.ADMIN){
+                System.out.println("ventana admin abierta");
+                VentanaAdmin ventanaAdmin=new VentanaAdmin();
+                ventanaAdmin.setVisible(true);
+            }else if (usuario.getTipo()==Tipo.LECTOR){
+                System.out.println("Ventana de lectores abierta");
+                VentanaPrincipal ventanaPrincipal=new VentanaPrincipal(usuario);
+                ventanaPrincipal.setVisible(true);
+            }
 
-        if (usuario != null) {
-            VentanaPrincipal ventana = new VentanaPrincipal(usuario);
-            ventana.setVisible(true);
-            dispose();
-        } else {
+        }else {
             JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
+
+
+
+        }
+
+
 
     private void abrirVentanaRegistro() {
         VentanaRegistro ventanaRegistro = new VentanaRegistro(servicioAutenticacion, gestorUsuarios);
