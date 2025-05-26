@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArbolBinarioBusqueda<T extends Comparable<T>> {
+
     private class Nodo { // Puedes mover esta clase fuera si quieres reutilizarla
         T valor;
         Nodo izquierdo;
@@ -157,6 +158,9 @@ public class ArbolBinarioBusqueda<T extends Comparable<T>> {
     public interface NodoVisitante<T> {
         void visitar(T valor);
     }
+
+
+
 
     public Nodo getRaiz() {
         return raiz;

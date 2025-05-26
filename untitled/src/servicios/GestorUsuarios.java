@@ -20,6 +20,18 @@ public class GestorUsuarios {
     public void eliminarLector(Lector lector){
         listaLectores.eliminar(lector);
     }
+    public Lector buscarLectorCorreo(String correo){
+        List<Lector> listaFiltrar=listaLectores.obtenerTodos();
+        for(int i=0;i<listaFiltrar.size()-1;i++){
+            if(listaFiltrar.get(i).getCorreo().equals(correo));
+            return listaFiltrar.get(i);
+        }
+        return null;
+    }
+
+    public List<Lector> obtenerTodosLectores(){
+       return listaLectores.obtenerTodos();
+    }
 
 
 

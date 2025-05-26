@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Biblioteca {
     private GestorLibros gestorLibro;
-    private GestorUsuarios gestorUsuarios;
+    private GestorUsuarios gestorLectores;
     private GestorAdmin gestorAdmin;
     private ServicioAutenticacion gestorUtentificar;
 
@@ -17,7 +17,7 @@ public class Biblioteca {
     public Biblioteca() {
 
             this.gestorLibro = new GestorLibros();
-            this.gestorUsuarios = new GestorUsuarios();
+            this.gestorLectores = new GestorUsuarios();
             this.gestorAdmin = new GestorAdmin();
             this.gestorUtentificar = new ServicioAutenticacion();
 
@@ -31,6 +31,13 @@ public class Biblioteca {
         }return false;
 
     }
+    public  Lector buscarCorreo(String correo){
+        Lector lector=getGestorLectores().buscarLectorCorreo(correo);
+        if(lector==null){
+            return null;
+        }
+        return lector;
+    }
     public void eliminarLibro(Libro libro){
         gestorLibro.eliminarLibro(libro);
     }
@@ -38,13 +45,13 @@ public class Biblioteca {
     public void agregarLector(Lector lector){
         if(!gestorUtentificar.existeUsuario(lector.correo)){
             gestorUtentificar.registrarUsuario(lector);
-            gestorUsuarios.agregarLector(lector);
+            gestorLectores.agregarLector(lector);
         }
     }
 
     public void eliminarLector(Lector lector){
         gestorUtentificar.eliminarUsuario(lector.getCorreo());
-        gestorUsuarios.eliminarLector(lector);
+        gestorLectores.eliminarLector(lector);
     }
 
     public void agregarLector(Usuario usuario){
@@ -55,6 +62,7 @@ public class Biblioteca {
     public void agregarAdministrador(Administrador administrador){
         if(!gestorAdmin.contenido(administrador)){
             gestorAdmin.agregarAdmin(administrador);
+            getGestorUtentificar().registrarUsuario(administrador);
         }
     }
     public void eliminarAdministrador(Administrador administrador){
@@ -78,12 +86,12 @@ public class Biblioteca {
         this.gestorLibro = gestorLibro;
     }
 
-    public GestorUsuarios getGestorUsuarios() {
-        return gestorUsuarios;
+    public GestorUsuarios getGestorLectores() {
+        return gestorLectores;
     }
 
-    public void setGestorUsuarios(GestorUsuarios gestorUsuarios) {
-        this.gestorUsuarios = gestorUsuarios;
+    public void setGestorLectores(GestorUsuarios gestorLectores) {
+        this.gestorLectores = gestorLectores;
     }
 
     public ServicioAutenticacion getGestorUtentificar() {
@@ -100,6 +108,28 @@ public class Biblioteca {
 
     public void setGestorAdmin(GestorAdmin gestorAdmin) {
         this.gestorAdmin = gestorAdmin;
+    }
+
+    public void cargarDatos(){
+        Administrador administrador=new Administrador("juan","buitrago","1@gmail.com","123",Tipo.ADMIN);
+        gestorAdmin.agregarAdmin(administrador);
+        gestorUtentificar.registrarUsuario(administrador);
+
+        Lector lector1 = new Lector("Lucía", "Ramírez", "2@gmail.com", "123", Tipo.LECTOR);
+        Lector lector2 = new Lector("Carlos", "Gómez", "3@gmail.com", "123", Tipo.LECTOR);
+        Lector lector3 = new Lector("Ana", "Pérez", "4@gmail.com", "123", Tipo.LECTOR);
+        gestorUtentificar.registrarUsuario(lector1);
+        gestorUtentificar.registrarUsuario(lector2);
+        gestorUtentificar.registrarUsuario(lector3);
+
+        gestorLectores.agregarLector(lector1);
+        gestorLectores.agregarLector(lector2);
+        gestorLectores.agregarLector(lector3);
+
+
+
+
+        System.out.println("Datos cargados");
     }
 
 

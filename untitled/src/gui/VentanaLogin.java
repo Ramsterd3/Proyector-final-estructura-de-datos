@@ -15,6 +15,7 @@ public class VentanaLogin extends JFrame {
     private Biblioteca biblioteca=new Biblioteca();
 
     public VentanaLogin() {
+        biblioteca.cargarDatos();
 
 
         // Configuración básica de la ventana

@@ -133,7 +133,7 @@ public class VentanaRegistro extends JFrame {
         } else {
             Lector nuevoLector = new Lector(nombre, apellido, correo, contraseña,tipo);
             biblioteca.getGestorUtentificar().registrarUsuario(nuevoLector);
-            biblioteca.getGestorUsuarios().agregarLector(nuevoLector);
+            biblioteca.getGestorLectores().agregarLector(nuevoLector);
         }
 
         JOptionPane.showMessageDialog(this, "Usuario registrado con éxito", "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);

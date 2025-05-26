@@ -1,10 +1,8 @@
 package servicios;
 
-import modelo.ArbolBinarioBusqueda;
-import modelo.ColaPrioridad;
-import modelo.ListaEnlazada;
-import modelo.Libro;
+import modelo.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,6 +141,16 @@ public class GestorLibros {
         }
 
         return categorias;
+    }
+    public Libro buscarAutor(String nombreAutor){
+       List<Libro>listaLibro=catalogoLibros.obtenerTodos();
+       for(int i=0; i<listaLibro.size()-1;i++){
+           if(listaLibro.get(i).getAutor().equals(nombreAutor)){
+               return listaLibro.get(i);
+           }
+       }
+       return null;
+
     }
 
     public ListaEnlazada<String> obtenerTodosLosAutores() {

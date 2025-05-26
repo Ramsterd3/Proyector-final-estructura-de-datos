@@ -11,8 +11,10 @@ import java.util.List;
 public class VentanaAdmin extends JFrame {
 
     private DefaultTableModel modeloTablaLibros;
+    private DefaultTableModel modeloTablaLectores;
     Biblioteca biblioteca;
     List<Libro> listaLibros = new ArrayList<>();
+    List<Lector> listaLectores=new ArrayList<>();
     Usuario usuarioActual;
 
     public VentanaAdmin(Usuario usuario, Biblioteca biblioteca) {
@@ -20,7 +22,7 @@ public class VentanaAdmin extends JFrame {
         this.usuarioActual=usuario;
         setTitle("Panel del Administrador");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 450);
+        setSize(600, 550);
         setLocationRelativeTo(null);
 
         JTabbedPane pestañas = new JTabbedPane();
@@ -113,15 +115,70 @@ public class VentanaAdmin extends JFrame {
         panelCategorias.add(new JScrollPane(tablaCategorias), BorderLayout.CENTER);
         pestañas.addTab("Categorías Populares", panelCategorias);
 
+
+
         JPanel panelUsuarios = new JPanel(new BorderLayout());
-        String[] columnasUsuarios = {"Nombre", "Préstamos Realizados"};
-        Object[][] datosUsuarios = {
-                {"Juan Pérez", 35},
-                {"María Gómez", 28},
-                {"Luis Torres", 25}
+
+// Título para la tabla de usuarios
+        JLabel tituloUsuarios = new JLabel("Usuarios Activos");
+        tituloUsuarios.setFont(new Font("Arial", Font.BOLD, 16));
+        tituloUsuarios.setHorizontalAlignment(SwingConstants.CENTER);
+        panelUsuarios.add(tituloUsuarios, BorderLayout.NORTH);
+
+// Definición de la tabla
+        String[] columnasUsuarios = {"Nombre", "Apellido", "Correo", "Contraseña", "Tipo"};
+        Object[][] datosLectores = {};
+        modeloTablaLectores = new DefaultTableModel(datosLectores, columnasUsuarios) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
-        JTable tablaUsuarios = new JTable(datosUsuarios, columnasUsuarios);
+
+        JTable tablaUsuarios = new JTable(modeloTablaLectores);
+        listaLectores = biblioteca.getGestorLectores().obtenerTodosLectores();
+        actualizarTablaLectores();
+
+// ScrollPane para la tabla
+        JScrollPane scrollUsuarios = new JScrollPane(tablaUsuarios);
+        panelUsuarios.add(scrollUsuarios, BorderLayout.CENTER);
+
+// Añadir la pestaña al panel principal
+        pestañas.addTab("Usuarios Activos", panelUsuarios);
+
+
         panelUsuarios.add(new JScrollPane(tablaUsuarios), BorderLayout.CENTER);
+
+        JButton botonEliminarUsuario = new JButton("Eliminar");
+        JPanel panelBotonEliminar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelBotonEliminar.add(botonEliminarUsuario);
+        panelUsuarios.add(panelBotonEliminar, BorderLayout.SOUTH);
+
+
+        botonEliminarUsuario.addActionListener(e -> {
+            int filaSeleccionada = tablaUsuarios.getSelectedRow();
+            if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(this, "Selecciona un usuario para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Obtener el objeto Usuario directamente desde listaLectores
+            Lector usuarioSeleccionado = listaLectores.get(filaSeleccionada);
+
+            int confirmar = JOptionPane.showConfirmDialog(this, "¿Estás seguro de eliminar al usuario?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if (confirmar == JOptionPane.YES_OPTION) {
+                biblioteca.getGestorUtentificar().eliminarUsuario(usuarioSeleccionado.getCorreo());
+                biblioteca.getGestorLectores().eliminarLector(usuarioSeleccionado);
+
+                // Actualizar lista y tabla
+                listaLectores = biblioteca.getGestorLectores().obtenerTodosLectores();
+                actualizarTablaLectores();
+
+                JOptionPane.showMessageDialog(this, "Usuario eliminado exitosamente.");
+            }
+        });
+
+// Añadir la pestaña al panel principal
+        pestañas.addTab("Usuarios Activos", panelUsuarios);
         pestañas.addTab("Usuarios Activos", panelUsuarios);
 
         add(pestañas, BorderLayout.CENTER);
@@ -169,14 +226,42 @@ public class VentanaAdmin extends JFrame {
         });
 
         botonEliminar.addActionListener(e -> {
-            int filaSeleccionada = tablaLibros.getSelectedRow();
-            if (filaSeleccionada >= 0) {
-                modeloTablaLibros.removeRow(filaSeleccionada);
-            } else {
-                JOptionPane.showMessageDialog(this, "Selecciona una fila para eliminar", "Atención", JOptionPane.WARNING_MESSAGE);
+            if(!txtTitulo.getText().trim().isEmpty()){
+                biblioteca.eliminarLibro(biblioteca.getGestorLibro().buscarPorTitulo(txtTitulo.getText()));
+                listaLibros=biblioteca.getGestorLibro().obtenerTodosLosLibros();
+                actualizarTablaLibros();
+                
+            } else if (!txtAutor.getText().trim().isEmpty()) {
+                biblioteca.eliminarLibro(biblioteca.getGestorLibro().buscarAutor(txtAutor.getText()));
+                listaLibros=biblioteca.getGestorLibro().obtenerTodosLosLibros();
+                actualizarTablaLibros();
+            }
+            else {
+                System.out.println("revisar Campos");
             }
         });
     }
+
+
+        private void actualizarTablaLectores() {
+            modeloTablaLectores.setRowCount(0); // Limpiar tabla
+
+            List<Lector> listaUsuarios = biblioteca.getGestorLectores().obtenerTodosLectores();
+
+            for (Usuario usuario : listaUsuarios) {
+                String tipo = (usuario instanceof Administrador) ? "Administrador" : "Lector";
+                Object[] fila = {
+                        usuario.getNombre(),
+                        usuario.getApellido(),
+                        usuario.getCorreo(),
+                        usuario.getContraseña(),
+                        tipo
+                };
+                modeloTablaLectores.addRow(fila);
+            }
+        }
+
+
 
     private void actualizarTablaLibros() {
         modeloTablaLibros.setRowCount(0); // Limpiar tabla
