@@ -70,7 +70,7 @@ public class VentanaLogin extends JFrame {
             JOptionPane.showMessageDialog(this, "Por favor complete todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        Usuario usuario = biblioteca.getServicioAutenticacion().autenticar(correo, contraseña);
+        Usuario usuario = biblioteca.getGestorUtentificar().autenticar(correo, contraseña);
         if(usuario!=null){
             if(usuario.getTipo()==Tipo.ADMIN){
                 System.out.println("ventana admin abierta");

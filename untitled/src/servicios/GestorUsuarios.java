@@ -5,19 +5,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GestorUsuarios {
-    private ArbolBinarioBusqueda<Lector> lectores;
+    private ArbolBinarioBusqueda<Lector> listaLectores;
     private List<Administrador> administradores;  // <-- Aquí agregamos lista para admins
     private GrafoNoDirigido<Lector> grafoAfinidad;
 
     public GestorUsuarios() {
-        this.lectores = new ArbolBinarioBusqueda<>();
+        this.listaLectores = new ArbolBinarioBusqueda<>();
         this.administradores = new ArrayList<>();  // <-- Inicializar lista admins
         this.grafoAfinidad = new GrafoNoDirigido<>();
     }
 
     public void agregarLector(Lector lector) {
-        lectores.insertar(lector);
+        listaLectores.insertar(lector);
         grafoAfinidad.agregarVertice(lector);
+    }
+    public void eliminarLector(Lector lector){
+        listaLectores.eliminar(lector);
     }
 
     public void agregarAdministrador(Administrador admin) {

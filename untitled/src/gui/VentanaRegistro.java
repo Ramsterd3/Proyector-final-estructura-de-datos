@@ -119,7 +119,7 @@ public class VentanaRegistro extends JFrame {
         }
 
         // Verificar si el correo ya está registrado
-        if (biblioteca.getServicioAutenticacion().existeUsuario(correo)) {
+        if (biblioteca.getGestorUtentificar().existeUsuario(correo)) {
             JOptionPane.showMessageDialog(this, "El correo ya está registrado", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -127,13 +127,13 @@ public class VentanaRegistro extends JFrame {
         if (tipo == Tipo.ADMIN) {
             System.out.println("hola");
             Administrador admin = new Administrador(nombre, apellido, correo, contraseña,tipo);
-            biblioteca.getServicioAutenticacion().registrarUsuario(admin);
+            biblioteca.getGestorUtentificar().registrarUsuario(admin);
             biblioteca.getGestorAdmin().agregarAdmin(admin);
 
         } else {
             Lector nuevoLector = new Lector(nombre, apellido, correo, contraseña,tipo);
-            biblioteca.getGestorUsuario().registrarUsuario(nuevoLector);
-            biblioteca.getServicioAutenticacion().registrarUsuario(nuevoLector);
+            biblioteca.getGestorUtentificar().registrarUsuario(nuevoLector);
+            biblioteca.getGestorUsuarios().agregarLector(nuevoLector);
         }
 
         JOptionPane.showMessageDialog(this, "Usuario registrado con éxito", "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);

@@ -11,16 +11,16 @@ public class Biblioteca {
     private GestorLibros gestorLibro;
     private GestorUsuarios gestorUsuarios;
     private GestorAdmin gestorAdmin;
-    private ServicioAutenticacion gestorUsuario;
-    private ServicioAutenticacion servicioAutenticacion;
+    private ServicioAutenticacion gestorUtentificar;
+
 
     public Biblioteca() {
 
             this.gestorLibro = new GestorLibros();
             this.gestorUsuarios = new GestorUsuarios();
             this.gestorAdmin = new GestorAdmin();
-            this.gestorUsuario = new ServicioAutenticacion();
-            this.servicioAutenticacion=new ServicioAutenticacion();
+            this.gestorUtentificar = new ServicioAutenticacion();
+
 
 
     }
@@ -36,18 +36,20 @@ public class Biblioteca {
     }
 
     public void agregarLector(Lector lector){
-        if(!gestorUsuario.existeUsuario(lector.correo)){
-            gestorUsuario.registrarUsuario(lector);
+        if(!gestorUtentificar.existeUsuario(lector.correo)){
+            gestorUtentificar.registrarUsuario(lector);
+            gestorUsuarios.agregarLector(lector);
         }
     }
 
     public void eliminarLector(Lector lector){
-        gestorUsuario.eliminarUsuario(lector.getCorreo());
+        gestorUtentificar.eliminarUsuario(lector.getCorreo());
+        gestorUsuarios.eliminarLector(lector);
     }
 
     public void agregarLector(Usuario usuario){
-        if(!gestorUsuario.existeUsuario(usuario.correo)){
-            gestorUsuario.registrarUsuario(usuario);
+        if(!gestorUtentificar.existeUsuario(usuario.correo)){
+            gestorUtentificar.registrarUsuario(usuario);
         }
     }
     public void agregarAdministrador(Administrador administrador){
@@ -84,12 +86,12 @@ public class Biblioteca {
         this.gestorUsuarios = gestorUsuarios;
     }
 
-    public ServicioAutenticacion getGestorUsuario() {
-        return gestorUsuario;
+    public ServicioAutenticacion getGestorUtentificar() {
+        return gestorUtentificar;
     }
 
-    public void setGestorUsuario(ServicioAutenticacion gestorUsuario) {
-        this.gestorUsuario = gestorUsuario;
+    public void setGestorUtentificar(ServicioAutenticacion gestorUtentificar) {
+        this.gestorUtentificar = gestorUtentificar;
     }
 
     public GestorAdmin getGestorAdmin() {
@@ -100,11 +102,8 @@ public class Biblioteca {
         this.gestorAdmin = gestorAdmin;
     }
 
-    public ServicioAutenticacion getServicioAutenticacion() {
-        return servicioAutenticacion;
-    }
 
-    public void setServicioAutenticacion(ServicioAutenticacion servicioAutenticacion) {
-        this.servicioAutenticacion = servicioAutenticacion;
-    }
+
+
+
 }
