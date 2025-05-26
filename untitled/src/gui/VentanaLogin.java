@@ -5,8 +5,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 import modelo.*;
-import servicios.ServicioAutenticacion;
-import servicios.GestorUsuarios;
 
 public class VentanaLogin extends JFrame {
     private JTextField campoCorreo;
@@ -78,7 +76,7 @@ public class VentanaLogin extends JFrame {
                 ventanaAdmin.setVisible(true);
             }else if (usuario.getTipo()==Tipo.LECTOR){
                 System.out.println("Ventana de lectores abierta");
-                VentanaPrincipal ventanaPrincipal=new VentanaPrincipal(usuario);
+                VentanaLector ventanaPrincipal=new VentanaLector(usuario,biblioteca);
                 ventanaPrincipal.setVisible(true);
             }
 

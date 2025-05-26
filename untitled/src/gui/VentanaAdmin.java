@@ -12,11 +12,10 @@ public class VentanaAdmin extends JFrame {
 
     private DefaultTableModel modeloTablaLibros;
     Biblioteca biblioteca;
-     List<Libro> listaLibros=new ArrayList<>();
-
+    List<Libro> listaLibros = new ArrayList<>();
 
     public VentanaAdmin(Usuario usuario, Biblioteca biblioteca) {
-        this.biblioteca=biblioteca;
+        this.biblioteca = biblioteca;
         setTitle("Panel del Administrador");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 450);
@@ -32,15 +31,7 @@ public class VentanaAdmin extends JFrame {
         panelLibros.add(tituloTabla, BorderLayout.NORTH);
 
         String[] columnasLibros = {"Título", "Autor", "Año", "Categoría", "Estado"};
-        Object[][] datosLibros = {
-                {"Cien años de soledad", "Gabriel García Márquez", 1967, "Literatura", "Disponible"},
-                {"Breve historia del tiempo", "Stephen Hawking", 1988, "Ciencia", "Prestado"},
-                {"Introducción a Java", "James Gosling", 1995, "Tecnología", "Disponible"},
-                {"El Quijote", "Miguel de Cervantes", 1605, "Literatura", "Disponible"},
-                {"Estructuras de Datos", "Mark Allen Weiss", 2005, "Tecnología", "Prestado"},
-                {"Física para científicos", "Raymond Serway", 2010, "Ciencia", "Disponible"},
-                {"Algoritmos", "Robert Sedgewick", 2011, "Tecnología", "Disponible"}
-        };
+        Object[][] datosLibros = {};
 
         modeloTablaLibros = new DefaultTableModel(datosLibros, columnasLibros) {
             public boolean isCellEditable(int row, int column) {
@@ -68,7 +59,6 @@ public class VentanaAdmin extends JFrame {
         gbc.gridx = 0;
         gbc.weightx = 1.0;
 
-        // Campos más cortos con 10 columnas
         JTextField txtTitulo = new JTextField(10);
         JTextField txtAutor = new JTextField(10);
         JTextField txtAno = new JTextField(10);
@@ -110,7 +100,6 @@ public class VentanaAdmin extends JFrame {
 
         pestañas.addTab("Gestionar", panelLibros);
 
-        // Otros paneles, igual que antes
         JPanel panelCategorias = new JPanel(new BorderLayout());
         String[] columnasCat = {"Categoría", "Préstamos"};
         Object[][] datosCat = {
@@ -134,6 +123,18 @@ public class VentanaAdmin extends JFrame {
         pestañas.addTab("Usuarios Activos", panelUsuarios);
 
         add(pestañas, BorderLayout.CENTER);
+
+        // Botón Cerrar Sesión agregado aquí:
+        JButton btnCerrarSesion = new JButton("Cerrar Sesión");
+        JPanel panelCerrarSesion = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelCerrarSesion.add(btnCerrarSesion);
+        add(panelCerrarSesion, BorderLayout.SOUTH);
+
+        btnCerrarSesion.addActionListener(e -> {
+            this.dispose(); // Cierra esta ventana
+            // Si tienes ventana login, la puedes abrir aquí:
+            // new VentanaLogin().setVisible(true);
+        });
 
         botonAgregar.addActionListener(e -> {
             try {
@@ -190,10 +191,9 @@ public class VentanaAdmin extends JFrame {
         }
     }
 
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-           // new VentanaAdmin().setVisible(true);
+            //new VentanaAdmin(null, null).setVisible(true);
         });
     }
 }
