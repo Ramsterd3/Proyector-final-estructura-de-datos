@@ -190,7 +190,8 @@ public class VentanaAdmin extends JFrame {
         add(panelCerrarSesion, BorderLayout.SOUTH);
 
         btnCerrarSesion.addActionListener(e -> {
-            this.dispose(); // Cierra esta ventana
+            this.dispose();
+            SwingUtilities.invokeLater(() -> new VentanaLogin(biblioteca).setVisible(true));// Cierra esta ventana
             // Si tienes ventana login, la puedes abrir aquí:
             // new VentanaLogin().setVisible(true);
         });
