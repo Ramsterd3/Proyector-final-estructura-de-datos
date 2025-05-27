@@ -50,6 +50,7 @@ public class GestorUsuarios {
         return false;
     }
 
+
     public ArbolBinarioBusqueda<Lector> getListaLectores() {
         return listaLectores;
     }

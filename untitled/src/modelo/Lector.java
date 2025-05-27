@@ -1,9 +1,6 @@
 package modelo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Lector extends Usuario implements Comparable<Lector> {
 
@@ -26,6 +23,29 @@ public class Lector extends Usuario implements Comparable<Lector> {
 
 
     }
+
+    public boolean eliminarPrestamo(Prestamo prestamo) {
+        ListaEnlazada<Prestamo> nuevaLista = new ListaEnlazada<>();
+        boolean eliminado = false;
+
+        Nodo<Prestamo> nodo = historialPrestamos.getCabeza();
+        while (nodo != null) {
+            Prestamo actual = nodo.getValor();
+            if (!eliminado && actual.getLibro().getTitulo().equals(prestamo.getLibro().getTitulo())) {
+                eliminado = true; // no agregamos este
+            } else {
+                nuevaLista.agregar(actual); // mantenemos el resto
+            }
+            nodo = nodo.getSiguiente();
+        }
+
+        if (eliminado) {
+            historialPrestamos = nuevaLista;
+        }
+
+        return eliminado;
+    }
+
 
     public void agregarValoracion(Valoracion valoracion) {
         valoracionesRealizadas.agregar(valoracion);

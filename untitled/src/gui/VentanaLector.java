@@ -162,17 +162,49 @@ public class VentanaLector extends JFrame {
 
         String[] columnas = {"Título", "Autor", "Año", "Categoría", "Estado", "Calificación"};
         modeloTablaPrestamo = new DefaultTableModel(columnas, 0);
-
-
         JTable tabla = new JTable(modeloTablaPrestamo);
         JScrollPane scroll = new JScrollPane(tabla);
         panel.add(scroll, BorderLayout.CENTER);
+
+        // Crear botón y panel de botones
+        JButton botonDevolverPrestamo = new JButton("Realizar devolución");
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelBotones.add(botonDevolverPrestamo);
+        panel.add(panelBotones, BorderLayout.SOUTH);
+        // Evento del botón
+        botonDevolverPrestamo.addActionListener(e -> {
+            int fila = tabla.getSelectedRow();
+            if (fila != -1) {
+                String tituloLibro = (String) modeloTablaPrestamo.getValueAt(fila, 0);
+                Prestamo prestamoSeleccionado = lisbroPrestamo.stream()
+                        .filter(p -> p.getLibro().getTitulo().equals(tituloLibro))
+                        .findFirst().orElse(null);
+
+                if (prestamoSeleccionado != null) {
+                    // 1. Cambiar estado del libro
+                    biblioteca.getGestorLectores().buscarLectorCorreo(prestamoSeleccionado.getLector().getCorreo()).eliminarPrestamo(prestamoSeleccionado);
+                    biblioteca.getGestorLibro().buscarPorTitulo(prestamoSeleccionado.getLibro().getTitulo()).setEstado("disponible");
+                    actualizarTablaPrestamo();
+                    actualizarTablaPrestamo();
+                    // 2. Eliminar préstamo del historial
+
+
+                    // 3. Actualizar tablas
+                    actualizarTablaPrestamo();
+                    actualizarTablaLibros();
+
+                    JOptionPane.showMessageDialog(panel, "Libro devuelto exitosamente.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(panel, "Selecciona un libro para devolver.");
+            }
+        });
+
         actualizarTablaPrestamo();
-
-
 
         return panel;
     }
+
 
     private void actualizarTablaPrestamo() {
         modeloTablaPrestamo.setRowCount(0);
