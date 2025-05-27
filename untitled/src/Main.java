@@ -27,8 +27,10 @@ public class Main {
 
         // Mostrar ventana de login
         SwingUtilities.invokeLater(() -> {
+            Biblioteca biblioteca=new Biblioteca();
+            biblioteca.cargarDatos();
 
-            VentanaLogin ventanaLogin = new VentanaLogin();
+            VentanaLogin ventanaLogin = new VentanaLogin(biblioteca);
             ventanaLogin.setVisible(true);
         });
     }

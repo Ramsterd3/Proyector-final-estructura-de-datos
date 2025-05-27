@@ -12,10 +12,11 @@ public class VentanaLogin extends JFrame {
     private JButton botonLogin;
     private JButton botonRegistro;
 
-    private Biblioteca biblioteca=new Biblioteca();
+    private Biblioteca biblioteca;
 
-    public VentanaLogin() {
-        biblioteca.cargarDatos();
+    public VentanaLogin(Biblioteca biblioteca) {
+        this.biblioteca=biblioteca;
+
 
 
         // Configuración básica de la ventana
@@ -70,24 +71,33 @@ public class VentanaLogin extends JFrame {
             return;
         }
         Usuario usuario = biblioteca.getGestorUtentificar().autenticar(correo, contraseña);
-        if(usuario!=null){
-            if(usuario.getTipo()==Tipo.ADMIN){
+        if (usuario != null) {
+            if (usuario.getTipo() == Tipo.ADMIN) {
                 System.out.println("ventana admin abierta");
-                VentanaAdmin ventanaAdmin=new VentanaAdmin(usuario,biblioteca);
+                VentanaAdmin ventanaAdmin = new VentanaAdmin(usuario, biblioteca);
                 ventanaAdmin.setVisible(true);
-            }else if (usuario.getTipo()==Tipo.LECTOR){
+                this.dispose();
+            } else if (usuario.getTipo() == Tipo.LECTOR) {
                 System.out.println("Ventana de lectores abierta");
-                VentanaLector ventanaPrincipal=new VentanaLector(usuario,biblioteca);
-                ventanaPrincipal.setVisible(true);
-            }
 
-        }else {
+                System.out.println("Buscando lector con correo: " + usuario.getCorreo());
+                Lector lector = biblioteca.getGestorLectores().buscarLectorCorreo(usuario.getCorreo());
+                System.out.println("Lector encontrado: " + lector);
+
+                if (lector == null) {
+                    JOptionPane.showMessageDialog(this, "Error: No se encontró el lector con ese correo.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                VentanaLector ventanaPrincipal = new VentanaLector(lector, biblioteca);
+                ventanaPrincipal.setVisible(true);
+                this.dispose();
+            }
+        } else {
             JOptionPane.showMessageDialog(this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
 
-
-
-        }
 
 
 

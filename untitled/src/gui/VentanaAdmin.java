@@ -272,7 +272,7 @@ public class VentanaAdmin extends JFrame {
                     libro.getAutor(),
                     libro.getAño(),
                     libro.getCategoria(),
-                    "Disponible" // Puedes cambiar esto si tienes lógica para el estado
+                    libro.getEstado() // Puedes cambiar esto si tienes lógica para el estado
             };
             modeloTablaLibros.addRow(fila);
         }

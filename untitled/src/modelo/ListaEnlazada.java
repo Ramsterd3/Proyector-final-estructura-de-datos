@@ -131,4 +131,28 @@ public class ListaEnlazada<T> implements Iterable<T> {
             }
         };
     }
+
+    public Nodo<T> getCabeza() {
+        return cabeza;
+    }
+
+    public void setCabeza(Nodo<T> cabeza) {
+        this.cabeza = cabeza;
+    }
+
+    public Nodo<T> getCola() {
+        return cola;
+    }
+
+    public void setCola(Nodo<T> cola) {
+        this.cola = cola;
+    }
+
+    public int getTamaño() {
+        return tamaño;
+    }
+
+    public void setTamaño(int tamaño) {
+        this.tamaño = tamaño;
+    }
 }

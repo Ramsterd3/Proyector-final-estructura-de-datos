@@ -130,7 +130,8 @@ public class VentanaRegistro extends JFrame {
             biblioteca.getGestorUtentificar().registrarUsuario(admin);
             biblioteca.getGestorAdmin().agregarAdmin(admin);
 
-        } else {
+        } else if(tipo==Tipo.LECTOR){
+            System.out.println("x2");
             Lector nuevoLector = new Lector(nombre, apellido, correo, contraseña,tipo);
             biblioteca.getGestorUtentificar().registrarUsuario(nuevoLector);
             biblioteca.getGestorLectores().agregarLector(nuevoLector);

@@ -1,6 +1,8 @@
 package modelo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Lector extends Usuario implements Comparable<Lector> {
@@ -18,12 +20,25 @@ public class Lector extends Usuario implements Comparable<Lector> {
 
     }
 
-    public void agregarPrestamo(Prestamo prestamo) {
+    public boolean agregarPrestamo(Prestamo prestamo) {
         historialPrestamos.agregar(prestamo);
+        return true;
+
+
     }
 
     public void agregarValoracion(Valoracion valoracion) {
         valoracionesRealizadas.agregar(valoracion);
+
+    }
+    public List<Prestamo> obtenerTodosPrestamos(){
+        List<Prestamo>listaPrestamo=new ArrayList<>();
+        Nodo<Prestamo> nodoArranque=historialPrestamos.getCabeza();
+        for(int i=0;i<historialPrestamos.tamaño();i++){
+            listaPrestamo.add(nodoArranque.getValor());
+            nodoArranque=nodoArranque.getSiguiente();
+        }
+        return listaPrestamo;
     }
 
     public ListaEnlazada<Valoracion> getValoracionesRealizadas() {
@@ -46,7 +61,17 @@ public class Lector extends Usuario implements Comparable<Lector> {
         return similitudConOtrosLectores;
     }
 
+    public void setHistorialPrestamos(ListaEnlazada<Prestamo> historialPrestamos) {
+        this.historialPrestamos = historialPrestamos;
+    }
 
+    public void setValoracionesRealizadas(ListaEnlazada<Valoracion> valoracionesRealizadas) {
+        this.valoracionesRealizadas = valoracionesRealizadas;
+    }
+
+    public void setSimilitudConOtrosLectores(Map<Lector, Integer> similitudConOtrosLectores) {
+        this.similitudConOtrosLectores = similitudConOtrosLectores;
+    }
 
     @Override
     public int compareTo(Lector otro) {

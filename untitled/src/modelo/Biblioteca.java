@@ -110,27 +110,43 @@ public class Biblioteca {
         this.gestorAdmin = gestorAdmin;
     }
 
-    public void cargarDatos(){
-        Administrador administrador=new Administrador("juan","buitrago","1@gmail.com","123",Tipo.ADMIN);
-        gestorAdmin.agregarAdmin(administrador);
-        gestorUtentificar.registrarUsuario(administrador);
+    public void cargarDatos() {
+        Administrador administrador = new Administrador("juan", "buitrago", "1@gmail.com", "123", Tipo.ADMIN);
+
+        if (!gestorAdmin.contenido(administrador)) {
+            gestorAdmin.agregarAdmin(administrador);
+        }
+
+        if (!gestorUtentificar.existeUsuario(administrador.getCorreo())) {
+            gestorUtentificar.registrarUsuario(administrador);
+        }
 
         Lector lector1 = new Lector("Lucía", "Ramírez", "2@gmail.com", "123", Tipo.LECTOR);
         Lector lector2 = new Lector("Carlos", "Gómez", "3@gmail.com", "123", Tipo.LECTOR);
         Lector lector3 = new Lector("Ana", "Pérez", "4@gmail.com", "123", Tipo.LECTOR);
-        gestorUtentificar.registrarUsuario(lector1);
-        gestorUtentificar.registrarUsuario(lector2);
-        gestorUtentificar.registrarUsuario(lector3);
 
-        gestorLectores.agregarLector(lector1);
-        gestorLectores.agregarLector(lector2);
-        gestorLectores.agregarLector(lector3);
+        Libro libro1 = new Libro("Cien años de soledad", "Gabriel García Márquez", 1967, "Realismo mágico");
+        Libro libro2 = new Libro("1984", "George Orwell", 1949, "Distopía");
+        Libro libro3 = new Libro("El nombre del viento", "Patrick Rothfuss", 2007, "Fantasía");
 
+        agregarLibro(libro1);
+        agregarLibro(libro2);
+        agregarLibro(libro3);
 
+        Lector[] lectores = {lector1, lector2, lector3};
 
+        for (Lector lector : lectores) {
+            if (!gestorUtentificar.existeUsuario(lector.getCorreo())) {
+                gestorUtentificar.registrarUsuario(lector);
+            }
+            if (gestorLectores.buscarLectorCorreo(lector.getCorreo())==null) { // asumo que tienes un método así o similar
+                gestorLectores.agregarLector(lector);
+            }
+        }
 
         System.out.println("Datos cargados");
     }
+
 
 
 
